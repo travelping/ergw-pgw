@@ -8,6 +8,9 @@ services:
     privileged: true
     network_mode: host
 
-networks:
-  default:
-    driver: host
+  pgw-c-node:
+    build: pgw-c-node
+    image: ergw/ergw-pgw-c-node
+    env_file: .env
+    privileged: true
+    network_mode: host

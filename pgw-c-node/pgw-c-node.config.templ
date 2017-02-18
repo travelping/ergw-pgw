@@ -1,0 +1,70 @@
+[{setup, [{data_dir, "/var/lib/ergw"},
+	  {log_dir,  "/var/log/pgw-c-node"}				%% NOTE: lager is not using this
+	 ]},
+
+ {ergw, [{sockets,
+      [{irx, [{type, 'gtp-c'},
+          {ip, ${PGW_S5C_IPADDR_ERL}},
+          {netdev, "$PGW_S5C_IFACE"},
+          freebind
+         ]},
+       {grx, [{type, 'gtp-u'},
+          {node, 'ergw-gtp-u-node@${HOSTNAME}'},
+          {name, 'grx'}]}
+      ]},
+
+     {vrfs,
+      [{upstream, [{pools,  [{${PGW_CLIENT_IPADDR_START_ERL}, ${PGW_CLIENT_IPADDR_END_ERL}, 32}
+                            ]},
+                   {'MS-Primary-DNS-Server', ${PGW_CLIENT_PRIMARY_DNS_ERL}},
+                   {'MS-Secondary-DNS-Server', ${PGW_CLIENT_PRIMARY_DNS_ERL}},
+                   {'MS-Primary-NBNS-Server', ${PGW_CLIENT_PRIMARY_NBNS_ERL}},
+                   {'MS-Secondary-NBNS-Server', ${PGW_CLIENT_PRIMARY_NBNS_ERL}}
+              ]}
+      ]},
+
+     {handlers,
+      [{gn, [{handler, pgw_s5s8},
+         {sockets, [irx]},
+         {data_paths, [grx]},
+         {aaa, [{'Username',
+             [{default, ['IMSI', <<"@">>, 'APN']}]}]}
+         ]},
+       {s5s8, [{handler, pgw_s5s8},
+           {sockets, [irx]},
+           {data_paths, [grx]}
+         ]},
+       {s2a,  [{handler, pgw_s2a},
+           {sockets, [irx]},
+           {data_paths, [grx]}
+         ]}
+      ]},
+
+     {apns,
+      [{${PGW_APN_ERL}, [{vrf, upstream}]}
+      ]}
+    ]},
+
+ {ergw_aaa, [
+          {ergw_aaa_provider, {ergw_aaa_mock, [{secret, <<"MySecret">>}]}}
+          %% {ergw_aaa_provider,
+          %%  {ergw_aaa_radius,
+          %%   [{nas_identifier,<<"nas_id">>},
+          %%    {radius_auth_server,{{127,0,0,1},1812,<<"secret">>}},
+          %%    {radius_acct_server,{{127,0,0,1},1813,<<"secret">>}}
+          %%   ]}
+          %% }
+        ]},
+
+ {lager, [
+     {colored, true},
+     {log_root, "/var/log/pgw-c-node"},
+     {error_logger_redirect, true},
+     {crash_log, "crash.log"},
+     {handlers, [
+             {lager_console_backend, debug},
+             {lager_file_backend, [{file, "error.log"}, {level, error}]},
+             {lager_file_backend, [{file, "console.log"}, {level, debug}]}
+            ]}
+    ]}
+].
