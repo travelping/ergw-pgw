@@ -1,0 +1,25 @@
+[
+ {'ergw-gtp-u-node', []},
+
+ {gtp_u_kmod, [
+	       {sockets, [{grx, [{ip, ${PGW_S5U_IPADDR_ERL}},
+				 {netdev, "${PGW_S5U_IFACE}"},
+				 freebind,
+				 %% {netns, "/var/run/netns/grx"},
+				 {routes, [${PGW_CLIENT_IP_NET_ERL}]}
+				]}
+			 ]}
+	      ]},
+
+ {lager, [
+	  {log_root, "/var/log/pgw-u-node"},
+	  {error_logger_redirect, true},
+	  {colored, true},
+	  {crash_log, "crash.log"},
+	  {handlers, [
+		      {lager_console_backend, info},
+		      {lager_file_backend, [{file, "error.log"}, {level, error}]},
+		      {lager_file_backend, [{file, "console.log"}, {level, info}]}
+		     ]}
+	 ]}
+].
