@@ -19,13 +19,28 @@ net_to_erlang() {
 }
 
 
-# configuration parameter validation
-[ -z "$PGW_S5U_IPADDR" ] && exit_msg "PGW_S5U_IPADDR is not set"
-[ -z "$PGW_S5U_IFACE" ] && exit_msg "PGW_S5U_IFACE is not set"
-[ -z "$PGW_CLIENT_IP_NET" ] && exit_msg "PGW_CLIENT_IP_NET is not set"
+parse_generic () {
+  #echo parsing ${1}=${!1}
+  [ -n "${!1}" ] || ( echo "env variable $1 is not set"; false )
+}
 
-export PGW_S5U_IPADDR_ERL=`ip_to_erlang $PGW_S5U_IPADDR`
-export PGW_CLIENT_IP_NET_ERL=`net_to_erlang $PGW_CLIENT_IP_NET`
+parse_ip_net () {
+  #TODO: some more validation for IP networks
+  parse_generic $1 && eval export ${1}_ERL=\"$(net_to_erlang ${!1})\"
+}
+
+parse_ip_addr () {
+  #TODO: some more validation for IP addresses
+  parse_generic $1 && eval export ${1}_ERL=\"$(ip_to_erlang ${!1})\"
+}
+
+VALIDATION_ERROR=""
+
+parse_ip_addr PGW_S5U_IPADDR || VALIDATION_ERROR=1
+parse_generic PGW_S5U_IFACE || VALIDATION_ERROR=1
+parse_ip_net PGW_CLIENT_IP_NET || VALIDATION_ERROR=1
+
+[ -n "$VALIDATION_ERROR" ] && exit_msg "Exiting due to missing configuration parameters"
 
 # create the config from template
 envsubst < /config/pgw-u-node.config.templ > /etc/ergw-gtp-u-node/ergw-gtp-u-node.config
