@@ -52,6 +52,7 @@ parse_apn () {
 VALIDATION_ERROR=""
 
 parse_generic PGW_S5C_IFACE || VALIDATION_ERROR=1
+parse_generic PGW_SGI_IFACE || VALIDATION_ERROR=1
 parse_apn PGW_APN || VALIDATION_ERROR=1
 
 # parse IP addresses

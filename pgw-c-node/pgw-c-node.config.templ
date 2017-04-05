@@ -14,7 +14,7 @@
       ]},
 
      {vrfs,
-      [{upstream, [{pools,  [{${PGW_CLIENT_IPADDR_START_ERL}, ${PGW_CLIENT_IPADDR_END_ERL}, 32}
+      [{$PGW_SGI_IFACE, [{pools,  [{${PGW_CLIENT_IPADDR_START_ERL}, ${PGW_CLIENT_IPADDR_END_ERL}, 32}
                             ]},
                    {'MS-Primary-DNS-Server', ${PGW_CLIENT_PRIMARY_DNS_ERL}},
                    {'MS-Secondary-DNS-Server', ${PGW_CLIENT_PRIMARY_DNS_ERL}},
