@@ -4,13 +4,13 @@ services:
   pgw-u-node:
     build: pgw-u-node
     image: ergw/ergw-pgw-u-node
-    env_file: .env
+    env_file: env
     privileged: true
     network_mode: host
 
   pgw-c-node:
     build: pgw-c-node
     image: ergw/ergw-pgw-c-node
-    env_file: .env
+    env_file: env
     privileged: true
     network_mode: host
