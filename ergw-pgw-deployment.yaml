@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ergw-pgw
+  labels:
+    run: ergw-pgw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ergw-pgw
+  template:
+    metadata:
+        labels:
+          run: ergw-pgw
+    spec:
+      containers:
+      - name: ergw-u-node
+        image: ergw/ergw-pgw-u-node
+        envFrom:
+        - configMapRef:
+            name: ergw-pgw-configmap
+      - name: ergw-c-node
+        image: ergw/ergw-pgw-c-node
+        envFrom:
+        - configMapRef:
+            name: ergw-pgw-configmap
