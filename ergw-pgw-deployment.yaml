@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: ergw-pgw
   labels:
-    run: ergw-pgw
+    app: ergw-pgw
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: ergw-pgw
+      app: ergw-pgw
   template:
     metadata:
-        labels:
-          run: ergw-pgw
+      labels:
+        app: ergw-pgw
     spec:
       containers:
       - name: ergw-u-node
