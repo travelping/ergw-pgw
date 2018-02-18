@@ -24,20 +24,18 @@
       ]},
 
      {handlers,
-      [{gn, [{handler, pgw_s5s8},
-         {sockets, [irx]},
-         {data_paths, [grx]},
-         {aaa, [{'Username',
-             [{default, ['IMSI', <<"@">>, 'APN']}]}]}
-         ]},
-       {s5s8, [{handler, pgw_s5s8},
-           {sockets, [irx]},
-           {data_paths, [grx]}
-         ]},
-       {s2a,  [{handler, pgw_s2a},
-           {sockets, [irx]},
-           {data_paths, [grx]}
-         ]}
+      [{'h1', [{handler, pgw_s5s8},
+               {protocol, gn},
+               {sockets, [irx]},
+               {data_paths, [grx]},
+               {aaa, [{'Username',
+                     [{default, ['IMSI', <<"@">>, 'APN']}]}]}
+              ]},
+       {'h2', [{handler, pgw_s5s8},
+               {protocol, s5s8},
+               {sockets, [irx]},
+               {data_paths, [grx]}
+              ]}
       ]},
 
      {apns,
@@ -46,7 +44,7 @@
     ]},
 
  {ergw_aaa, [
-          {ergw_aaa_provider, {ergw_aaa_mock, [{secret, <<"MySecret">>}]}}
+          {ergw_aaa_provider, {ergw_aaa_mock, [{shared_secret, <<"MySecret">>}]}}
           %% {ergw_aaa_provider,
           %%  {ergw_aaa_radius,
           %%   [{nas_identifier,<<"nas_id">>},
