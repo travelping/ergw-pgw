@@ -18,6 +18,10 @@ spec:
       - name: ergw-u-node
         image: ergw/ergw-pgw-u-node
         imagePullPolicy: Always
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
         envFrom:
         - configMapRef:
             name: ergw-pgw-configmap
