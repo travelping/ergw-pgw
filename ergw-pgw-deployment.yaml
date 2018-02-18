@@ -17,11 +17,13 @@ spec:
       containers:
       - name: ergw-u-node
         image: ergw/ergw-pgw-u-node
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: ergw-pgw-configmap
       - name: ergw-c-node
         image: ergw/ergw-pgw-c-node
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: ergw-pgw-configmap
