@@ -6,7 +6,9 @@
 				 {netdev, "${PGW_S5U_IFACE}"},
 				 freebind,
 				 %% {netns, "/var/run/netns/grx"},
-				 {routes, [${PGW_CLIENT_IP_NET_ERL}]}
+				 {vrf, [
+					{routes, [${PGW_CLIENT_IP_NET_ERL}]}
+				       ]}
 				]}
 			 ]}
 	      ]},

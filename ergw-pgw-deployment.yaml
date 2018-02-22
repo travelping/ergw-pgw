@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ergw-pgw
+  labels:
+    app: ergw-pgw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ergw-pgw
+  template:
+    metadata:
+      labels:
+        app: ergw-pgw
+    spec:
+      containers:
+      - name: ergw-u-node
+        image: ergw/ergw-pgw-u-node
+        imagePullPolicy: Always
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        envFrom:
+        - configMapRef:
+            name: ergw-pgw-configmap
+      - name: ergw-c-node
+        image: ergw/ergw-pgw-c-node
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: ergw-pgw-configmap
