@@ -39,7 +39,8 @@
       ]},
 
      {apns,
-      [{${PGW_APN_ERL}, [{vrf, upstream}]}
+      [{${PGW_APN_ERL}, [{vrf, $PGW_SGI_IFACE}]},
+       {'_' , [{vrf, $PGW_SGI_IFACE}]}
       ]}
     ]},
 
