@@ -48,4 +48,7 @@ envsubst < /config/pgw-u-node.config.templ > /etc/ergw-gtp-u-node/ergw-gtp-u-nod
 # unload gtp module as reset; will be reloaded on start of application
 #rmmod gtp
 
+DEFAULT_GW_IFACE=$(ip r | grep default | cut -d " " -f 5)
+[ -n "PGW_SIMPLE_MASQ" ] && iptables -t nat -A POSTROUTING -o $DEFAULT_GW_IFACE -j MASQUERADE
+
 exec "$@"
