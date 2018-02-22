@@ -1,0 +1,18 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_script:
+  - cp env-example env
+  - export TAG=`if [ "$TRAVIS_EVENT_TYPE" == "pull_request" ]; then echo PR-$TRAVIS_PULL_REQUEST_BRANCH ; else echo $TRAVIS_BRANCH ; fi`
+  - if [ "$TAG" == "master" ]; then export TAG="latest"; fi
+  - sed -i "/image/ s/$/:$TAG/" docker-compose.yaml
+
+script:
+  - docker-compose build
+
+after_success:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker-compose push
+  - echo "docker push done"
